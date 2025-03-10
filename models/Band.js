@@ -5,4 +5,4 @@ let Band = db.define('band', {
     genre: Sequelize.STRING
 });
 
-module.exports = Band;
+module.exports = { Band };

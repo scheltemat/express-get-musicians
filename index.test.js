@@ -22,6 +22,12 @@ describe('./musicians endpoint', () => {
         expect(responseData[1].instrument).toBe("Voice");
         expect(responseData[2].instrument).toBe("Guitar");
     });
+
+    test("musicians/1 endpoint returns the first musician", async () => {
+        const response = await request(app).get("/musicians/1");
+        const responseData = JSON.parse(response.text);
+        expect(responseData.name).toBe("Mick Jagger");
+    })
 });
 
 describe('./bands endpoint', () => {

@@ -34,7 +34,7 @@ describe('./musicians endpoint', () => {
         expect(responseData2.name).toBe("Drake");
     });
 
-    test("musicians/:id post endpoint adds a new musician", async () => {
+    test("musicians post endpoint adds a new musician", async () => {
         const newMusician = await Musician.create({
             name: "Michael Jackson",
             instrument: "Voice",

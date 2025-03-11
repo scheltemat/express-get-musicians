@@ -23,10 +23,15 @@ describe('./musicians endpoint', () => {
         expect(responseData[2].instrument).toBe("Guitar");
     });
 
-    test("musicians/1 endpoint returns the first musician", async () => {
-        const response = await request(app).get("/musicians/1");
+    test("musicians/:id endpoint returns the correct musician", async () => {
+        let id = 1;
+        const response = await request(app).get(`/musicians/${id}`);
         const responseData = JSON.parse(response.text);
         expect(responseData.name).toBe("Mick Jagger");
+        id = 2;
+        const response2 = await request(app).get(`/musicians/${id}`);
+        const responseData2 = JSON.parse(response2.text);
+        expect(responseData2.name).toBe("Drake");
     })
 });
 

@@ -10,8 +10,8 @@ app.get("/musicians", async (req, res) => {
   res.json(musicians);
 });
 
-app.get("/musicians/1", async (req, res) => {
-  const musician = await Musician.findByPk(1);
+app.get("/musicians/:id", async (req, res) => {
+  const musician = await Musician.findByPk(req.params.id);
   res.json(musician);
 });
 

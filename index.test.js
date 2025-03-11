@@ -32,7 +32,37 @@ describe('./musicians endpoint', () => {
         const response2 = await request(app).get(`/musicians/${id}`);
         const responseData2 = JSON.parse(response2.text);
         expect(responseData2.name).toBe("Drake");
-    })
+    });
+
+    test("musicians/:id post endpoint adds a new musician", async () => {
+        const newMusician = await Musician.create({
+            name: "Michael Jackson",
+            instrument: "Voice",
+        });
+        const allMusicians = await Musician.findAll();
+        const addedMusician = allMusicians.find(musician => musician.id === newMusician.id);
+        expect(addedMusician.name).toBe("Michael Jackson");
+        expect(addedMusician.instrument).toBe("Voice");
+    });
+
+    test("musicians/:id put endpoint updates a musician", async () => {
+        let id = 1;
+        const musician = await Musician.findByPk(id);
+        await musician.update({
+            name: "Keith Richards",
+            instrument: "Guiter",
+        });
+        expect(musician.name).toBe("Keith Richards");
+        expect(musician.instrument).toBe("Guiter");
+    });
+
+    test("musicians/:id delete endpoint deletes a musician", async () => {
+        let id = 1;
+        const musicianToDelete = await Musician.findByPk(id);
+        await musicianToDelete.destroy();
+        const allMusicians = await Musician.findAll();
+        expect(allMusicians).not.toContain(musicianToDelete);
+    });
 });
 
 describe('./bands endpoint', () => {

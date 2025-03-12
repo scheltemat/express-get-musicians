@@ -4,10 +4,9 @@ execSync('npm install');
 execSync('npm run seed');
 
 const request = require("supertest");
-const { db } = require('./db/connection');
 const { Musician } = require('./models/index');
+const { Band } = require("./models/index");
 const app = require('./src/app');
-const { seedMusician } = require("./seedData");
 
 describe('./musicians endpoint', () => {
     test("requests endpoint successfully", async () => {
@@ -77,5 +76,17 @@ describe('./bands endpoint', () => {
         expect(responseData[0].name).toBe("The Beatles");
         expect(responseData[1].genre).toBe("Pop");
         expect(responseData[2].genre).toBe("Rock");
+    });
+
+    
+    test("bands/:id endpoint returns the correct musician", async () => {
+        let id = 1;
+        const response = await request(app).get(`/bands/${id}`);
+        const responseData = JSON.parse(response.text);
+        expect(responseData.name).toBe("The Beatles");
+        id = 2;
+        const response2 = await request(app).get(`/bands/${id}`);
+        const responseData2 = JSON.parse(response2.text);
+        expect(responseData2.name).toBe("Black Pink");
     });
 });

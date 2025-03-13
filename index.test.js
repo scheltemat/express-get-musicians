@@ -56,6 +56,18 @@ describe("./musicians endpoint", () => {
     expect(response.body.error[0].msg).toBe("Invalid value");
   });
 
+  test("returns an error if name or instrument field is too short", async () => {
+    const newMusician = {
+      name: "A",
+      instrument: "Guitar",
+    };
+    const response = await request(app).post("/musicians").send(newMusician);
+    expect(response.body.error).toBeDefined();
+    expect(response.body.error[0].msg).toBe(
+      "Name must be between 2 and 20 characters long"
+    );
+  });
+
   test("musicians/:id put endpoint updates a musician", async () => {
     let id = 1;
     const musician = await Musician.findByPk(id);
@@ -65,6 +77,28 @@ describe("./musicians endpoint", () => {
     });
     expect(musician.name).toBe("Keith Richards");
     expect(musician.instrument).toBe("Guiter");
+  });
+
+  test("musicians/:id put returns an error if name or instrument field is empty", async () => {
+    let id = 1;
+    const response = await request(app).put(`/musicians/${id}`).send({
+      name: "",
+      instrument: "Guitar",
+    });
+    expect(response.body.error).toBeDefined();
+    expect(response.body.error[0].msg).toBe("Invalid value");
+  });
+
+  test("musicians/:id put returns an error if name or instrument field is too short", async () => {
+    let id = 1;
+    const response = await request(app).put(`/musicians/${id}`).send({
+      name: "A",
+      instrument: "Guitar",
+    });
+    expect(response.body.error).toBeDefined();
+    expect(response.body.error[0].msg).toBe(
+      "Name must be between 2 and 20 characters long"
+    );
   });
 
   test("musicians/:id delete endpoint deletes a musician", async () => {

@@ -18,6 +18,12 @@ router.post(
   [
     check("name").not().isEmpty().trim(),
     check("instrument").not().isEmpty().trim(),
+    check("name")
+      .isLength({ min: 2, max: 20 })
+      .withMessage("Name must be between 2 and 20 characters long"),
+    check("instrument")
+      .isLength({ min: 2, max: 20 })
+      .withMessage("Instrument must be between 2 and 20 characters long"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -30,11 +36,29 @@ router.post(
   }
 );
 
-router.put("/:id", async (req, res) => {
-  const musician = await Musician.findByPk(req.params.id);
-  musician.update(req.body);
-  res.json(musician);
-});
+router.put(
+  "/:id",
+  [
+    check("name").not().isEmpty().trim(),
+    check("instrument").not().isEmpty().trim(),
+    check("name")
+      .isLength({ min: 2, max: 20 })
+      .withMessage("Name must be between 2 and 20 characters long"),
+    check("instrument")
+      .isLength({ min: 2, max: 20 })
+      .withMessage("Instrument must be between 2 and 20 characters long"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.json({ error: errors.array() });
+    } else {
+      const musician = await Musician.findByPk(req.params.id);
+      musician.update(req.body);
+      res.json(musician);
+    }
+  }
+);
 
 router.delete("/:id", async (req, res) => {
   const musician = await Musician.findByPk(req.params.id);
